@@ -4,7 +4,8 @@ class pcss {
   public $options = array(
     'spacing' => 1,
     'spacing_char' => "\t",
-    'pcss_includes' => array()
+    'pcss_includes' => array(),
+    'sort_properties' => true
   );
   
   private $lines = array();
@@ -52,6 +53,9 @@ class pcss {
     require $this->file;
     $this->lines = explode(PHP_EOL,ob_get_clean());
     $this->lines = $this->buildLines();
+    if($this->options['sort_properties']) {
+      $this->sortProperties();
+    }
   }
   
   private function buildLines() {
@@ -102,6 +106,42 @@ class pcss {
       $l[$num] = $v;
     }
     return $l;
+  }
+  
+  private function sortProperties() {
+    $v = $this->lines[0];
+    for($i=0; $i < count($this->lines); $i++) {
+      $v = $this->lines[$i];
+      if($v['type'] == 'rule') {
+        continue;
+      }
+      $comp = array();
+      $tmp = array();
+      while($v['type'] == 'property') {
+        $comp[$i] = $v['line'];
+        $tmp[$i] = $v;
+        $i++;
+        $v = $this->lines[$i];
+      }
+      if(count($tmp) > 1) {
+        //let's sort this puppy
+        $tmp_order = array_keys($comp);
+        asort($comp);
+        $j = 0;
+        foreach($comp as $index => $val) {
+          if($j == 0) {
+            $tmp[$index]['first'] = true;
+          }
+          else {
+            unset($tmp[$index]['first']);
+          }          
+          unset($tmp[$index]['last']);
+          $this->lines[$tmp_order[$j]] = $tmp[$index];
+          $j++;
+        }
+        $this->lines[$tmp_order[$j-1]]['last'] = true;
+      }
+    }
   }
   
   public function cssHeader() {
