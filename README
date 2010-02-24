@@ -1,5 +1,5 @@
 PHP-CSS
-Developer: Andy Schuler <andy@leftshoedevelopment.com>
+Developer: Andy Schuler <andy at leftshoedevelopment dot com>
 Created: 2010-02-33
 Description: PHP CSS is a PHP CSS parser which renders CSS files by parsing a nesting format similar to SASS.  It also lets you use PHP directly within the 
 	CSS files for variables, math, or snippet inclusion just as you would if you were in a standard .php file.
