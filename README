@@ -1,0 +1,32 @@
+PHP-CSS
+Developer: Andy Schuler <andy@leftshoedevelopment.com>
+Created: 2010-02-33
+Description: PHP CSS is a PHP CSS parser which renders CSS files by parsing a nesting format similar to SASS.  It also lets you use PHP directly within the 
+	CSS files for variables, math, or snippet inclusion just as you would if you were in a standard .php file.
+Example usage: Take a look at index.php for an example of how to implement and style.pcss for an example of what the new css file format looks like.
+License: MIT License, see http://en.wikipedia.org/wiki/MIT_License
+
+The .pcss format:
+1) CSS properties MUST end with a ";"
+2) Indentation determines parent relationships for rules and properties.
+3) The file is rendered as PHP, so you can include whatever PHP you need in there as well.  In the example,
+	we're echoing 2 variables from an external file to store header colors.
+
+pcss.includes.php:
+If you want to include an external php file you you can do that in the style.pcss file itself (ie: <?php include css_variables.php; ?>), or you can have the class
+include it right before rendering .pcss file to keep it external or for inclusion across multiple .pcss files.
+
+Apache notes:
+I use this in conjunction with the following Apache directive inside of my VirtualHost directive:
+<Directory /var/www/my-project>
+        RewriteEngine on
+        RewriteBase /
+        RewriteCond %{REQUEST_URI} \.pcss$ [NC]
+	RewriteRule ^(.*)$ index.php?pcss=$1 [L,QSA]
+</Directory>
+
+This let's you setup a page that you can catch any request for a .pcss page and then render it through the index.php page.  You can also just render it in the querystring like:
+	<link href="/index.php?pcss=/location/of/pcss/file.pcss" />
+
+Notes:
+There aren't any validation checks on $_REQUEST['pcss'], so make sure you validate it yourself.

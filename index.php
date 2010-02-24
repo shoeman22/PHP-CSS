@@ -1,7 +1,7 @@
 <?php
 require 'pcss.class.php';
 
-$file = 'style.pcss'; //pcss file to render
+$file = isset($_REQUEST['pcss']) ? $_REQUEST['pcss'] : 'style.pcss'; //pcss file to render; be sure to validate.
 
 $options = array(
   'indent' => 1, //indent spaces for pretty formatting of css.  Default: 1
